@@ -1,0 +1,20 @@
+menu "Software Config"
+
+config BSP_USING_SEGGER_RTT
+    bool
+    default y
+
+config BSP_USING_FSM
+    bool
+    default y
+
+config BSP_USING_EVENT_RECORDER
+    bool "Enable Event Record"
+    default n
+
+config BSP_USING_METER
+    bool "Enable Meter"
+    default n
+    select BSP_USING_CD4051
+    select BSP_USING_HLW8032
+endmenu

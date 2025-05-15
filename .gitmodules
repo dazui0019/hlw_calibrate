@@ -1,0 +1,6 @@
+[submodule "middleware/rt-thread"]
+	path = middleware/rt-thread
+	url = https://github.com/RT-Thread/rt-thread.git
+[submodule "libraries/w25qxx"]
+	path = libraries/w25qxx
+	url = https://github.com/libdriver/w25qxx.git

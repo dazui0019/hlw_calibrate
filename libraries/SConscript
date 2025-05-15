@@ -1,0 +1,49 @@
+Import('RTT_ROOT')
+Import('rtconfig')
+from building import *
+
+cwd = GetCurrentDir()
+
+src_lib = Split("""
+""")
+
+src_tuya = Split("""
+""")
+
+src_w25qxx = Split("""
+""")
+
+path = Split("""
+""")
+
+if GetDepend('BSP_USING_SEGGER_RTT'):
+    src_lib += ['SEGGER_RTT_V810k/drv_rtt.c']
+    src_lib += ['SEGGER_RTT_V810k/SEGGER_RTT_printf.c']
+    src_lib += ['SEGGER_RTT_V810k/SEGGER_RTT.c']
+    path += [cwd + '/SEGGER_RTT_V810k']
+
+if GetDepend('BSP_USING_CD4051'):
+    src_lib += ['cd4051/drv_cd4051.c']
+    path += [cwd + '/cd4051']
+
+if GetDepend('BSP_USING_HLW8032'):
+    src_lib += ['hlw8032/drv_hlw8032.c']
+    path += [cwd + '/hlw8032']
+
+if GetDepend('BSP_USING_METER'):
+    src_lib += ['meter/drv_meter.c']
+    path += [cwd + '/meter']
+
+group = DefineGroup('App/Libraries', src_lib, depend = [''], CPPPATH = path)
+
+if GetDepend('BSP_USING_W25QXX'):
+    src_w25qxx += [
+        cwd + '/sfud_port/sfud_port.c',
+        ]
+    path += [
+        cwd + '/sfud_port',
+        ]
+    group_w25qxx = DefineGroup('App/Libraries/gd25q32', src_w25qxx, depend = ['BSP_USING_W25QXX'], CPPPATH = path)
+    group = group + group_w25qxx
+
+Return('group')
