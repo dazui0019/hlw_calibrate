@@ -6,6 +6,7 @@
 #include "dev_relay.h"
 #include "dev_lock.h"
 #include "drv_meter.h"
+#include <fal.h>
 
 #define LOG_TAG "app.evse_main"
 #define LOG_LVL LOG_LVL_DBG
@@ -77,6 +78,8 @@ void evse_main_thread_entry(void *parameter)
 
     /* SFUD initialize */
     gd25q32 = rt_sfud_flash_probe("gd25q32", "spi10");
+
+    fal_init();
 
     log_d("hlw calibrate start.");
 
