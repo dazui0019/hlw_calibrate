@@ -152,6 +152,9 @@
 #define DFS_FILESYSTEM_TYPES_MAX 4
 #define RT_USING_DFS_DEVFS
 /* end of DFS: device virtual file system */
+#define RT_USING_FAL
+#define FAL_USING_DEBUG
+#define FAL_PART_HAS_TABLE_CFG
 
 /* Device Drivers */
 
@@ -171,7 +174,7 @@
 #define RT_USING_SFUD
 #define RT_SFUD_USING_SFDP
 #define RT_SFUD_USING_FLASH_INFO_TABLE
-#define RT_SFUD_SPI_MAX_HZ 1000000
+#define RT_SFUD_SPI_MAX_HZ 50000000
 #define RT_USING_PIN
 #define RT_USING_HWTIMER
 /* end of Device Drivers */

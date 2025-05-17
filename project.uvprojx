@@ -335,9 +335,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls />
-              <Define>RT_USING_ARMLIBC, RT_USING_LIBC, GD32F470, __CLK_TCK=RT_TICK_PER_SECOND, USE_STDPERIPH_DRIVER, __RTTHREAD__, __STDC_LIMIT_MACROS</Define>
+              <Define>GD32F470, RT_USING_ARMLIBC, RT_USING_LIBC, __CLK_TCK=RT_TICK_PER_SECOND, __RTTHREAD__, __STDC_LIMIT_MACROS, USE_STDPERIPH_DRIVER</Define>
               <Undefine />
-              <IncludePath>.;libraries\cd4051;libraries\meter;middleware\rt-thread\components\drivers\include;middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Include;middleware\rt-thread\components\libc\posix\ipc;middleware\rt-thread\components\libc\compilers\common\extension;middleware\rt-thread\components\drivers\phy;applications;middleware\rt-thread\components\drivers\spi\sfud\inc;middleware\rt-thread\libcpu\arm\common;middleware\rt-thread\components\finsh;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\libc\posix\io\eventfd;libraries\SEGGER_RTT_V810k;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\libc\posix\io\epoll;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\utilities\ulog;middleware\rt-thread\components\drivers\include;middleware\libraries\GD32F4xx_Firmware_Library\CMSIS\GD\GD32F4xx\Include;middleware\rt-thread\components\dfs\dfs_v1\filesystems\devfs;middleware\rt-thread\components\drivers\smp_call;libraries\sfud_port;libraries\hlw8032;middleware\rt-thread\components\drivers\spi;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\libc\posix\io\poll;middleware\rt-thread\components\dfs\dfs_v1\include;middleware\rt-thread\include;middleware\libraries\gd32_drivers;middleware\libraries\GD32F4xx_Firmware_Library\CMSIS;middleware\rt-thread\components\libc\compilers\common\include;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\drivers\include;middleware\rt-thread\libcpu\arm\cortex-m4;middleware\rt-thread\components\libc\compilers\common\extension\fcntl\octal;board</IncludePath>
+              <IncludePath>middleware\rt-thread\components\drivers\include;middleware\libraries\GD32F4xx_Firmware_Library\CMSIS\GD\GD32F4xx\Include;middleware\rt-thread\components\drivers\spi;middleware\rt-thread\components\libc\compilers\common\extension;middleware\rt-thread\components\dfs\dfs_v1\filesystems\devfs;middleware\rt-thread\components\libc\compilers\common\include;middleware\libraries\GD32F4xx_Firmware_Library\CMSIS;middleware\rt-thread\components\libc\compilers\common\extension\fcntl\octal;middleware\rt-thread\libcpu\arm\cortex-m4;middleware\rt-thread\components\drivers\spi\sfud\inc;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\fal\inc;middleware\rt-thread\components\libc\posix\io\eventfd;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\drivers\include;middleware\rt-thread\libcpu\arm\common;middleware\rt-thread\components\drivers\include;libraries\meter;middleware\rt-thread\components\utilities\ulog;middleware\rt-thread\components\dfs\dfs_v1\include;libraries\sfud_port;applications;middleware\rt-thread\include;middleware\rt-thread\components\libc\posix\io\epoll;middleware\rt-thread\components\finsh;libraries\SEGGER_RTT_V810k;middleware\rt-thread\components\libc\posix\ipc;middleware\rt-thread\components\drivers\include;.;libraries\hlw8032;libraries\cd4051;middleware\rt-thread\components\drivers\smp_call;middleware\rt-thread\components\drivers\phy;middleware\rt-thread\components\drivers\include;middleware\rt-thread\components\drivers\include;ports\fal;middleware\rt-thread\components\libc\posix\io\poll;middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Include;middleware\libraries\gd32_drivers;board</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -382,23 +382,16 @@
           <GroupName>App/Libraries</GroupName>
           <Files>
             <File>
-              <FileName>drv_cd4051.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>libraries\cd4051\drv_cd4051.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>drv_meter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>libraries\meter\drv_meter.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
               <FileName>drv_rtt.c</FileName>
               <FileType>1</FileType>
               <FilePath>libraries\SEGGER_RTT_V810k\drv_rtt.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>SEGGER_RTT.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>libraries\SEGGER_RTT_V810k\SEGGER_RTT.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -417,9 +410,16 @@
           </Files>
           <Files>
             <File>
-              <FileName>SEGGER_RTT.c</FileName>
+              <FileName>drv_cd4051.c</FileName>
               <FileType>1</FileType>
-              <FilePath>libraries\SEGGER_RTT_V810k\SEGGER_RTT.c</FilePath>
+              <FilePath>libraries\cd4051\drv_cd4051.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>drv_meter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>libraries\meter\drv_meter.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -437,6 +437,13 @@
           <GroupName>Applications</GroupName>
           <Files>
             <File>
+              <FileName>dev_relay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\dev_relay.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>dev_lock.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\dev_lock.c</FilePath>
@@ -447,13 +454,6 @@
               <FileName>evse_main_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\evse_main_thread.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>dev_relay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\dev_relay.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -978,6 +978,37 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Fal</GroupName>
+          <Files>
+            <File>
+              <FileName>fal_partition.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\rt-thread\components\fal\src\fal_partition.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>fal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\rt-thread\components\fal\src\fal.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>fal_rtt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\rt-thread\components\fal\src\fal_rtt.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>fal_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\rt-thread\components\fal\src\fal_flash.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Filesystem</GroupName>
           <Files>
             <File>
@@ -1079,6 +1110,20 @@
           <GroupName>Finsh</GroupName>
           <Files>
             <File>
+              <FileName>msh_file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\rt-thread\components\finsh\msh_file.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>cmd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\rt-thread\components\finsh\cmd.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>msh.c</FileName>
               <FileType>1</FileType>
               <FilePath>middleware\rt-thread\components\finsh\msh.c</FilePath>
@@ -1093,23 +1138,9 @@
           </Files>
           <Files>
             <File>
-              <FileName>msh_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\rt-thread\components\finsh\msh_file.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
               <FileName>msh_parse.c</FileName>
               <FileType>1</FileType>
               <FilePath>middleware\rt-thread\components\finsh\msh_parse.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>cmd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\rt-thread\components\finsh\cmd.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1405,9 +1436,9 @@
           <GroupName>klibc</GroupName>
           <Files>
             <File>
-              <FileName>rt_vsscanf.c</FileName>
+              <FileName>rt_vsnprintf_std.c</FileName>
               <FileType>1</FileType>
-              <FilePath>middleware\rt-thread\src\klibc\rt_vsscanf.c</FilePath>
+              <FilePath>middleware\rt-thread\src\klibc\rt_vsnprintf_std.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -1426,9 +1457,9 @@
           </Files>
           <Files>
             <File>
-              <FileName>rt_vsnprintf_std.c</FileName>
+              <FileName>rt_vsscanf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>middleware\rt-thread\src\klibc\rt_vsnprintf_std.c</FilePath>
+              <FilePath>middleware\rt-thread\src\klibc\rt_vsscanf.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -1474,79 +1505,9 @@
           <GroupName>Libraries</GroupName>
           <Files>
             <File>
-              <FileName>gd32f4xx_misc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_misc.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>gd32f4xx_gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_gpio.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>system_gd32f4xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\CMSIS\GD\GD32F4xx\Source\system_gd32f4xx.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>gd32f4xx_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_usart.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>gd32f4xx_pmu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_pmu.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>gd32f4xx_timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_timer.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
               <FileName>gd32f4xx_dma.c</FileName>
               <FileType>1</FileType>
               <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_dma.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>gd32f4xx_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_adc.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>gd32f4xx_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_spi.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>gd32f4xx_exti.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_exti.c</FilePath>
-            </File>
-          </Files>
-          <Files>
-            <File>
-              <FileName>gd32f4xx_syscfg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_syscfg.c</FilePath>
             </File>
           </Files>
           <Files>
@@ -1558,9 +1519,89 @@
           </Files>
           <Files>
             <File>
+              <FileName>gd32f4xx_exti.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_exti.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>gd32f4xx_pmu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_pmu.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>gd32f4xx_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_adc.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>gd32f4xx_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_timer.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>gd32f4xx_usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_usart.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>gd32f4xx_misc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_misc.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>gd32f4xx_syscfg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_syscfg.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>system_gd32f4xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\CMSIS\GD\GD32F4xx\Source\system_gd32f4xx.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>gd32f4xx_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_gpio.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
+              <FileName>gd32f4xx_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_spi.c</FilePath>
+            </File>
+          </Files>
+          <Files>
+            <File>
               <FileName>gd32f4xx_rtc.c</FileName>
               <FileType>1</FileType>
               <FilePath>middleware\libraries\GD32F4xx_Firmware_Library\GD32F4xx_standard_peripheral\Source\gd32f4xx_rtc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ports/fal</GroupName>
+          <Files>
+            <File>
+              <FileName>fal_flash_sfud_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>ports\fal\fal_flash_sfud_port.c</FilePath>
             </File>
           </Files>
         </Group>
