@@ -7,7 +7,11 @@
 
 #define METER_DEVICE_NAME       "meter"
 #define METER_CHANNEL_NUM       3
+
 #define METER_CHANNEL_IDLE      3        /* 空闲通道号 */
+#define METER_CHANNEL_A         0        /* 通道A */
+#define METER_CHANNEL_B         1        /* 通道B */
+#define METER_CHANNEL_C         2        /* 通道C */
 
 /* 控制命令 */
 #define METER_CTRL_SWITCH_CHANNEL       0x21    /* 切换通道 */

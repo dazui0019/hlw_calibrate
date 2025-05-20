@@ -87,7 +87,8 @@ void evse_main_thread_entry(void *parameter)
     rt_device_control(relay_dev, RT_DEVICE_CTRL_RLY_CLOSE, RT_NULL);
 
     rt_memset(&msg, 0, sizeof(struct serial_rx_msg));
-    rt_device_control(meter_dev, METER_CTRL_SWITCH_CHANNEL, (void*)(intptr_t)2);
+    rt_device_control(meter_dev, METER_CTRL_SWITCH_CHANNEL, (void*)(intptr_t)METER_CHANNEL_A);
+
     for(;;){
         rt_memset(&msg, 0, sizeof(struct serial_rx_msg));
         result = rt_mq_recv(hlw->mq, &msg, sizeof(struct serial_rx_msg), RT_WAITING_FOREVER);
@@ -136,7 +137,7 @@ handle: /* 处理数据 */
         if(calibrate_count >= 9){
             log_i("calibrate success!");
             // 切换到下一通道
-            // rt_device_control(meter_dev, METER_CTRL_SWITCH_CHANNEL, (void*)(intptr_t)2);
+            // rt_device_control(meter_dev, METER_CTRL_SWITCH_CHANNEL, (void*)(intptr_t)METER_CHANNEL_A);
             meter->measure_data[channel].VparamXK = VparamXK_SUM / (calibrate_count+1);
             meter->measure_data[channel].AparamXK = AparamXK_SUM / (calibrate_count+1);
             meter->measure_data[channel].PparamXK = PparamXK_SUM / (calibrate_count+1);
@@ -154,6 +155,6 @@ handle: /* 处理数据 */
         }else{
             rt_thread_delay(1000);
         }
-        rt_device_control(meter_dev, METER_CTRL_SWITCH_CHANNEL, (void*)(intptr_t)2);
+        rt_device_control(meter_dev, METER_CTRL_SWITCH_CHANNEL, (void*)(intptr_t)METER_CHANNEL_A);
     }
 }

@@ -28,7 +28,21 @@ static rt_err_t meter_control(rt_device_t dev, int cmd, void *args)
             if ((intptr_t)args >= METER_CHANNEL_NUM)
                 return -RT_ERROR;
             meter_dev->current_channel = (intptr_t)args;
-            return rt_device_control(meter_dev->cd4051_dev, RT_DEVICE_CTRL_CHANNEL_SELECT, args);
+            switch(meter_dev->current_channel)
+            {
+                case METER_CHANNEL_IDLE:
+                    return rt_device_control(meter_dev->cd4051_dev, RT_DEVICE_CTRL_CHANNEL_SELECT, (void*)(intptr_t)3);
+                case METER_CHANNEL_A:
+                    return rt_device_control(meter_dev->cd4051_dev, RT_DEVICE_CTRL_CHANNEL_SELECT, (void*)(intptr_t)2);
+                case METER_CHANNEL_B:
+                    return rt_device_control(meter_dev->cd4051_dev, RT_DEVICE_CTRL_CHANNEL_SELECT, (void*)(intptr_t)1);
+                case METER_CHANNEL_C:
+                    return rt_device_control(meter_dev->cd4051_dev, RT_DEVICE_CTRL_CHANNEL_SELECT, (void*)(intptr_t)0);
+                default:
+                    log_e("Invalid channel: %d", meter_dev->current_channel);
+                    return -RT_ERROR;
+            }
+
         case METER_CTRL_SWITCH_TO_IDLE:
             /* 切换到空闲通道 */
             meter_dev->current_channel = METER_CHANNEL_IDLE;
