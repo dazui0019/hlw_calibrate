@@ -6,15 +6,11 @@
 #include "dev_relay.h"
 #include "dev_lock.h"
 #include "drv_meter.h"
-#include <fal.h>
+#include "evse_db.h"
 
 #define LOG_TAG "app.evse_main"
 #define LOG_LVL LOG_LVL_DBG
 #include <ulog.h>
-
-#include <sfud.h>
-#include <dev_spi_flash.h>
-#include <dev_spi_flash_sfud.h>
 
 #if defined(BSP_USING_EVENT_RECORDER)
 #include "EventRecorder.h"
@@ -27,7 +23,10 @@ static uint32_t VparamXK_SUM = 0;
 static uint32_t AparamXK_SUM = 0;
 static uint32_t PparamXK_SUM = 0;
 
-static rt_spi_flash_device_t gd25q32;
+/* hlw8032 */
+static uint32_t VparamXK[3] = {0, 0, 0};
+static uint32_t IparamXK[3] = {0, 0, 0};
+static uint32_t PparamXK[3] = {0, 0, 0};
 
 static int32_t this_abs(int32_t i)
 {
@@ -50,6 +49,7 @@ void evse_main_thread_entry(void *parameter)
     rt_ssize_t result = 0;
 
     uint32_t calibrate_count = 0;
+    rt_uint8_t channel = 0;
 
     /* 初始化继电器 */
     relay_dev = rt_device_find("relay");
@@ -76,12 +76,12 @@ void evse_main_thread_entry(void *parameter)
 
     hlw = (struct hlw8032_device *)(meter->hlw_dev);
 
-    /* SFUD initialize */
-    gd25q32 = rt_sfud_flash_probe("gd25q32", "spi10");
-
-    fal_init();
-
     log_d("hlw calibrate start.");
+
+    evse_db_get_hlw_param(VparamXK, IparamXK, PparamXK);
+    log_d("VparamXK: %d, %d, %d", VparamXK[0], VparamXK[1], VparamXK[2]);
+    log_d("IparamXK: %d, %d, %d", IparamXK[0], IparamXK[1], IparamXK[2]);
+    log_d("PparamXK: %d, %d, %d", PparamXK[0], PparamXK[1], PparamXK[2]);
 
     /* 吸合继电器 */
     rt_device_control(relay_dev, RT_DEVICE_CTRL_RLY_CLOSE, RT_NULL);
@@ -103,7 +103,8 @@ void evse_main_thread_entry(void *parameter)
 handle: /* 处理数据 */
         rt_memcpy(meter->temp_buffer, rx_buffer, rx_length);
         if(RT_EOK == rt_device_control(meter_dev, METER_CTRL_CALIBRATE, RT_NULL)){
-            if(meter->measure_data[meter->current_channel].PparamXK > 0U){
+            if(meter->measure_data[meter->current_channel].PparamXK > 0U){  // 当PparamXK > 0 时, 表示有电流输出
+                // 防止两次数据相差过大
                 if(this_abs((PparamXK_last) - (meter->measure_data[meter->current_channel].PparamXK)) < PparamXK_offset){
                     log_d("VparamXK: %d", meter->measure_data[meter->current_channel].VparamXK);
                     log_d("AparamXK: %d", meter->measure_data[meter->current_channel].AparamXK);
@@ -128,6 +129,7 @@ handle: /* 处理数据 */
         }
     /* 数据处理完毕 */
         // 切换到空闲通道, 等待1000ms
+        channel = meter->current_channel;   // 因为会被切换到空闲通道, 所以需要保存当前通道
         rt_device_control(meter_dev, METER_CTRL_SWITCH_TO_IDLE, RT_NULL);
         rt_device_read(msg.dev, 0, rx_buffer, RT_SERIAL_RB_BUFSZ);  // 清空接收缓冲区
         rt_mq_control(hlw->mq, RT_IPC_CMD_RESET, RT_NULL);
@@ -135,13 +137,17 @@ handle: /* 处理数据 */
             log_i("calibrate success!");
             // 切换到下一通道
             // rt_device_control(meter_dev, METER_CTRL_SWITCH_CHANNEL, (void*)(intptr_t)2);
-            meter->measure_data[meter->current_channel].VparamXK = VparamXK_SUM / (calibrate_count+1);
-            meter->measure_data[meter->current_channel].AparamXK = AparamXK_SUM / (calibrate_count+1);
-            meter->measure_data[meter->current_channel].PparamXK = PparamXK_SUM / (calibrate_count+1);
+            meter->measure_data[channel].VparamXK = VparamXK_SUM / (calibrate_count+1);
+            meter->measure_data[channel].AparamXK = AparamXK_SUM / (calibrate_count+1);
+            meter->measure_data[channel].PparamXK = PparamXK_SUM / (calibrate_count+1);
             log_i("calibrate count: %d", (calibrate_count+1));
-            log_i("VparamXK: %d", meter->measure_data[meter->current_channel].VparamXK);
-            log_i("AparamXK: %d", meter->measure_data[meter->current_channel].AparamXK);
-            log_i("PparamXK: %d", meter->measure_data[meter->current_channel].PparamXK);
+            log_i("VparamXK: %d", meter->measure_data[channel].VparamXK);
+            log_i("AparamXK: %d", meter->measure_data[channel].AparamXK);
+            log_i("PparamXK: %d", meter->measure_data[channel].PparamXK);
+            VparamXK[channel] = meter->measure_data[channel].VparamXK;
+            IparamXK[channel] = meter->measure_data[channel].AparamXK;
+            PparamXK[channel] = meter->measure_data[channel].PparamXK;
+            evse_db_set_hlw_param(VparamXK, IparamXK, PparamXK);
             for(;;){
                 rt_thread_delay(1000);
             }

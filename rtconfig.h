@@ -321,6 +321,17 @@
 /* Micrium: Micrium software products porting for RT-Thread */
 
 /* end of Micrium: Micrium software products porting for RT-Thread */
+#define PKG_USING_FLASHDB
+#define FDB_USING_KVDB
+#define FDB_USING_TSDB
+#define FDB_USING_FAL_MODE
+#define FDB_WRITE_GRAN_1BIT
+#define FDB_WRITE_GRAN 1
+#define FDB_NOT_USING_FILE_MODE
+#define FLASHDB_USING_SAMPLES
+#define FDB_DEBUG_ENABLE
+#define PKG_USING_FLASHDB_V10102
+#define PKG_FLASHDB_VER_NUM 0x10102
 /* end of system packages */
 
 /* peripheral libraries and drivers */
