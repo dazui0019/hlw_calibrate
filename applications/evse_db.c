@@ -21,12 +21,14 @@ static uint32_t IparamXK[3] = {0, 0, 0};
 static uint32_t PparamXK[3] = {0, 0, 0};
 
 static uint32_t boot_count = 0;
+static uint32_t calibrated = 0;
 /* default KV nodes */
 static struct fdb_default_kv_node default_kv_table[] = {
-        {"boot_count", &boot_count, sizeof(boot_count)}, /* int type KV */
-        {"VparamXK", &VparamXK, sizeof(VparamXK)},       /* int array type KV */
-        {"IparamXK", &IparamXK, sizeof(IparamXK)},       /* int array type KV */
-        {"PparamXK", &PparamXK, sizeof(PparamXK)},       /* int array type KV */
+        {"boot_count", &boot_count, sizeof(boot_count)},    /* 重启次数 */
+        {"calibrated", &calibrated, sizeof(calibrated)},    /* 是否校准 */
+        {"VparamXK", &VparamXK, sizeof(VparamXK)},          /* 电压校准参数 */
+        {"IparamXK", &IparamXK, sizeof(IparamXK)},          /* 电流校准参数 */
+        {"PparamXK", &PparamXK, sizeof(PparamXK)},          /* 功率校准参数 */
 };
 /* KVDB object */
 static struct fdb_kvdb kvdb = { 0 };
@@ -137,6 +139,19 @@ int evse_db_set_hlw_param(uint32_t VparamXK[], uint32_t IparamXK[], uint32_t Ppa
         log_e("Set PparamXK failed!");
         return -RT_ERROR;
     }
+    evse_db_set_calibrated(1);
     log_d("Set hlw param success!");
     return 0;
+}
+
+int evse_db_get_calibrated(uint32_t *calibrated)
+{
+    struct fdb_blob blob;
+    return fdb_kv_get_blob(&kvdb, "calibrated", fdb_blob_make(&blob, calibrated, sizeof(calibrated)));
+}
+
+int evse_db_set_calibrated(uint32_t calibrated)
+{
+    struct fdb_blob blob;
+    return fdb_kv_set_blob(&kvdb, "calibrated", fdb_blob_make(&blob, &calibrated, sizeof(calibrated)));
 }
