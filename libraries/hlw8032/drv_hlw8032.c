@@ -6,15 +6,6 @@
 
 #define HLW8032_UART_NAME  "uart7"      // HLW8032使用的串口设备名
 
-/* 采用隔离设计时(互感器)，计算电压，电流，功率所需的参数 */
-/**
- * todo: 需要实现校准功能, 现在是手算的。
- *      - 已实现校准功能, 还需要实现校准参数的保存和读取。
- */
-static uint32_t VparamXK = 2553320U;     // voltageREG*220V
-static uint32_t AparamXK = 32540U;     // currentREG*10A
-static uint32_t PparamXK = 140960600U;   // powerREG*220W
-
 /* 消息队列控制块 */
 static struct rt_messagequeue rx_mq;
 __attribute__((aligned(4))) static rt_uint8_t msg_pool[64];   // 消息队列缓冲区
@@ -60,21 +51,21 @@ static rt_err_t hlw8032_parse_data(rt_uint8_t *buffer, struct hlw8032_data *data
             if ((buffer[20] & 0x40) == 0x40) {
                 data->v_param = ((buffer[2] << 16) | (buffer[3] << 8) | (buffer[4]));
                 data->v_reg = ((buffer[5] << 16) | (buffer[6] << 8) | (buffer[7]));
-                data->voltage = ((float)(VparamXK) / (float)(data->v_reg));
+                data->voltage = ((float)(data->VparamXK) / (float)(data->v_reg));
                 log_d("Voltage: %0.2fV", data->voltage);
             }
 
             if ((buffer[20] & 0x20) == 0x20) {
                 data->i_param = ((buffer[8] << 16) | (buffer[9] << 8) | (buffer[10]));
                 data->i_reg = ((buffer[11] << 16) | (buffer[12] << 8) | (buffer[13]));
-                data->current = ((float)(AparamXK) / (float)(data->i_reg));
+                data->current = ((float)(data->AparamXK) / (float)(data->i_reg));
                 log_d("Current: %0.2fA", data->current);
             }
 
             if ((buffer[20] & 0x10) == 0x10) {
                 data->p_param = ((buffer[14] << 16) | (buffer[15] << 8) | (buffer[16]));
                 data->p_reg = ((buffer[17] << 16) | (buffer[18] << 8) | (buffer[19]));
-                data->power = ((float)(PparamXK) / (float)(data->p_reg));
+                data->power = ((float)(data->PparamXK) / (float)(data->p_reg));
                 log_d("Power: %0.2fW", data->power);
             }
             break;

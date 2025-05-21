@@ -93,6 +93,39 @@ static rt_ssize_t meter_read(rt_device_t dev, rt_off_t pos, void *buffer, rt_siz
     return ret;
 }
 
+/**
+ * @brief 写入数据(校准参数)
+ * @param[in] dev 设备句柄
+ * @param[in] pos 写入位置(通道号)
+ * @param[in] buffer 写入缓冲区
+ * @param[in] size 写入大小
+ */
+static rt_ssize_t meter_write(rt_device_t dev, rt_off_t pos, const void *buffer, rt_size_t size)
+{
+    struct meter_device *meter_dev = (struct meter_device *)dev;
+
+    // 检查通道号是否有效
+    if (pos >= METER_CHANNEL_NUM)
+        return -RT_ERROR;
+
+    // 检查数据大小是否匹配
+    if (size != sizeof(struct meter_calibration_params))
+        return -RT_ERROR;
+
+    // 加锁保护
+    rt_mutex_take(meter_dev->measure_lock, RT_WAITING_FOREVER);
+    
+    // 更新校准参数
+    const struct meter_calibration_params *params = (const struct meter_calibration_params *)buffer;
+    meter_dev->measure_data[pos].VparamXK = params->VparamXK;
+    meter_dev->measure_data[pos].AparamXK = params->AparamXK;
+    meter_dev->measure_data[pos].PparamXK = params->PparamXK;
+    
+    rt_mutex_release(meter_dev->measure_lock);
+    
+    return size;
+}
+
 /* 设备初始化 */
 static rt_err_t meter_init(rt_device_t dev)
 {
@@ -152,7 +185,7 @@ int rt_hw_meter_init(void)
     dev->parent.init        = meter_init;
     dev->parent.control     = meter_control;
     dev->parent.read        = meter_read;
-    dev->parent.write       = RT_NULL;
+    dev->parent.write       = meter_write;
     dev->parent.user_data   = RT_NULL;
     dev->parent.open        = RT_NULL;
 

@@ -18,6 +18,17 @@
 #define METER_CTRL_PARSE_DATA           0x22    /* 解析数据 */
 #define METER_CTRL_SWITCH_TO_IDLE       0x23    /* 切换到空闲通道 */
 #define METER_CTRL_CALIBRATE            0x24    /* 校准 */
+#define METER_CTRL_SET_PARAM            0x25    /* 设置参数 */
+
+/**
+ * @brief 电表校准参数结构体
+ */
+struct meter_calibration_params
+{
+    uint32_t VparamXK;  // 电压校准参数
+    uint32_t AparamXK;  // 电流校准参数
+    uint32_t PparamXK;  // 功率校准参数
+};
 
 struct meter_device
 {
