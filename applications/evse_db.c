@@ -10,8 +10,13 @@
 #include <ulog.h>
 
 #include <sfud.h>
-#include <dev_spi_flash.h>
-#include <dev_spi_flash_sfud.h>
+#if (RTTHREAD_VERSION >= RT_VERSION_CHECK(5, 2, 0))
+    #include <dev_spi_flash.h>
+    #include <dev_spi_flash_sfud.h>
+#else
+    #include <spi_flash.h>
+    #include <spi_flash_sfud.h>
+#endif
 
 const struct fal_partition *fdb_part = RT_NULL;
 
